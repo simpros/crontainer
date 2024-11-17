@@ -1,7 +1,7 @@
 import type { PageLoad } from './$types';
 
 export const load = (async ({ parent, untrack, params }) => {
-	const { backbacker } = await untrack(parent);
+	const { crontainer } = await untrack(parent);
 	if (!params.containerid) return { randy: 0 };
 
 	const randy = Math.random();

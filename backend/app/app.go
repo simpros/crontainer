@@ -1,10 +1,10 @@
 package app
 
 import (
-	"backbacker/database"
-	"backbacker/middleware"
+	"crontainer/database"
+	"crontainer/middleware"
+	"crontainer/repository"
 	"context"
-	"database/sql"
 	"errors"
 	"log/slog"
 	"net/http"
@@ -12,9 +12,9 @@ import (
 )
 
 type App struct {
-	logger *slog.Logger
-	router *http.ServeMux
-	db     *sql.DB
+	logger  *slog.Logger
+	router  *http.ServeMux
+	queries *repository.Queries
 }
 
 func New(logger *slog.Logger) *App {
@@ -34,7 +34,13 @@ func (a *App) Start(ctx context.Context) error {
 		return err
 	}
 
-	a.db = db
+	a.queries = repository.New(db)
+	err = database.ApplyMigrations(db)
+
+	if err != nil {
+		return err
+	}
+
 	a.loadRoutes(ctx)
 
 	server := http.Server{
@@ -47,7 +53,6 @@ func (a *App) Start(ctx context.Context) error {
 	go func() {
 		err := server.ListenAndServe()
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
-
 			a.logger.Error("Failed to start server", slog.Any("error", err))
 		}
 
@@ -63,6 +68,7 @@ func (a *App) Start(ctx context.Context) error {
 	case <-ctx.Done():
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 		server.Shutdown(ctx)
+		db.Close()
 		cancel()
 	}
 

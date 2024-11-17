@@ -11,7 +11,7 @@
 		const interval = setInterval(async () => {
 			fetching = true;
 			await new Promise((resolve) => setTimeout(resolve, 1000));
-			await invalidate('backbacker:containers');
+			await invalidate('crontainer:containers');
 			fetching = false;
 		}, 3000);
 		return () => clearInterval(interval);
@@ -23,9 +23,10 @@
 {#if data.containers.error}
 	<p style="color: red">{data.containers.error?.code}</p>
 {:else}
-	<h1>Container List {fetching}</h1>
-	<section class="grid grid-cols-[1fr_3fr]">
+	<section class="grid h-full grid-cols-[min-content_3fr] gap-3">
 		<ContainerList containers={data.containers.data} />
-		{@render children()}
+		<div>
+			{@render children()}
+		</div>
 	</section>
 {/if}

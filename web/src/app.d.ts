@@ -1,12 +1,12 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-import type {BackbackerClient} from "$lib/backbacker/backbacker-client";
+import type { CrontainerClient } from '$lib/crontainer/crontainer-client';
 
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			backbacker: BackbackerClient
+			crontainer: CrontainerClient;
 		}
 		// interface PageData {}
 		// interface PageState {}

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"backbacker/app"
+	"crontainer/app"
 	"context"
 	"log/slog"
 	"os"

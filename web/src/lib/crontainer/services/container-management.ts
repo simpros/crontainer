@@ -1,8 +1,8 @@
-import { BaseService, type BaseServiceArgs } from '$lib/backbacker/services/base-service';
-import { parseResponse } from '$lib/backbacker/utils/response-parser';
+import { BaseService, type BaseServiceArgs } from '$lib/crontainer/services/base-service';
+import { parseResponse } from '$lib/crontainer/utils/response-parser';
 import type { DockerContainerDto } from '../types';
 
-export class Dockermanagement extends BaseService {
+export class ContainerManagement extends BaseService {
 	constructor(args: BaseServiceArgs) {
 		super(args);
 	}

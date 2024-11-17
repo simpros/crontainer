@@ -1,9 +1,9 @@
-import { BackbackerClient } from '$lib/backbacker/backbacker-client';
+import { CrontainerClient } from '$lib/crontainer/crontainer-client';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-const initializeBackbacker: Handle = async ({ event, resolve }) => {
-	event.locals.backbacker = new BackbackerClient({
+const initializeCrontainer: Handle = async ({ event, resolve }) => {
+	event.locals.crontainer = new CrontainerClient({
 		baseUrl: 'http://localhost:8080',
 		fetch: event.fetch
 	});
@@ -17,4 +17,4 @@ const reroute: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle = sequence(initializeBackbacker, reroute);
+export const handle = sequence(initializeCrontainer, reroute);

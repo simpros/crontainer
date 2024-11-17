@@ -1,4 +1,4 @@
-export type BackbackerErrorResponse = {
+export type CrontainerErrorResponse = {
 	data: null;
 	error: {
 		code: number;
@@ -6,7 +6,7 @@ export type BackbackerErrorResponse = {
 	};
 };
 
-export type BackbackerSuccessResponse<T> = {
+export type CrontainerSuccessResponse<T> = {
 	error: null;
 	data: T;
 };
@@ -48,4 +48,4 @@ export type DockerContainerDto = {
 	Mounts: unknown[];
 };
 
-export type BackbackerResponse<T> = BackbackerSuccessResponse<T> | BackbackerErrorResponse;
+export type CrontainerResponse<T> = CrontainerSuccessResponse<T> | CrontainerErrorResponse;
