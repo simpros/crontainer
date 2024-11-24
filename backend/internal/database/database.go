@@ -4,16 +4,18 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"io/fs"
+	"log/slog"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite"
-
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+
 	_ "modernc.org/sqlite"
 )
 
-func Connect() (*sql.DB, error) {
+func Connect(logger *slog.Logger, migrations fs.FS) (*sql.DB, error) {
 	dbPath := os.Getenv("CRONTAINER_DB_PATH")
 	if dbPath == "" {
 		return nil, fmt.Errorf("environment variable CRONTAINER_DB_PATH is not set")
@@ -25,10 +27,17 @@ func Connect() (*sql.DB, error) {
 		return nil, err
 	}
 
+	err = applyMigrations(db, logger)
+	if err != nil {
+		return nil, err
+	}
+
 	return db, nil
 }
 
-func ApplyMigrations(db *sql.DB) error {
+func applyMigrations(db *sql.DB, logger *slog.Logger) error {
+	logger.Info("Applying migrations")
+
 	driver, err := sqlite.WithInstance(db, &sqlite.Config{
 		NoTxWrap: true,
 	})
@@ -36,14 +45,16 @@ func ApplyMigrations(db *sql.DB) error {
 		return err
 	}
 
-	m, err := migrate.NewWithDatabaseInstance("file://migrations", "sqlite3", driver)
+	migrator, err := migrate.NewWithDatabaseInstance("file://migrations", "sqlite3", driver)
 	if err != nil {
 		return err
 	}
 
-	err = m.Up()
+	err = migrator.Up()
 	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return err
 	}
+
+	logger.Info("Migrations applied successfully")
 	return nil
 }

@@ -1,7 +1,6 @@
 package containerhandler
 
 import (
-	backer_errors "crontainer/errors"
 	"context"
 	"encoding/json"
 	"log/slog"
@@ -9,12 +8,12 @@ import (
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+	"github.com/simpros/crontainer/internal/errors"
 )
 
 type DockerMgm struct {
 	logger       *slog.Logger
 	dockerClient *client.Client
-	Handler      *http.ServeMux
 }
 
 func New(logger *slog.Logger, ctx context.Context) (*DockerMgm, error) {
@@ -26,21 +25,20 @@ func New(logger *slog.Logger, ctx context.Context) (*DockerMgm, error) {
 
 	cli.NegotiateAPIVersion(ctx)
 
-	router := http.NewServeMux()
-
 	dockermgm := &DockerMgm{
 		logger:       logger,
 		dockerClient: cli,
-		Handler:      router,
 	}
-
-	dockermgm.loadRoutes()
 
 	return dockermgm, nil
 }
 
-func (h *DockerMgm) loadRoutes() {
-	h.Handler.HandleFunc("/", h.GetContainers)
+func (h *DockerMgm) LoadRoutes() *http.ServeMux {
+	router := http.NewServeMux()
+
+	router.HandleFunc("/", h.GetContainers)
+
+	return router
 }
 
 func (h *DockerMgm) GetContainers(w http.ResponseWriter, r *http.Request) {
@@ -53,7 +51,7 @@ func (h *DockerMgm) GetContainers(w http.ResponseWriter, r *http.Request) {
 		h.logger.Error(err.Error())
 
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(backer_errors.BackerError{
+		json.NewEncoder(w).Encode(errors.CrontainerError{
 			Code:    1001,
 			Message: "Failed to list containers",
 		})
