@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/simpros/crontainer/internal/handler/containerhandler"
-	"github.com/simpros/crontainer/internal/handler/cronhandler"
+	containerhandler "github.com/simpros/crontainer/internal/handler/container"
+	taskhandler "github.com/simpros/crontainer/internal/handler/task"
 	"github.com/simpros/crontainer/internal/middleware"
 	"github.com/simpros/crontainer/repository"
 )
@@ -19,16 +19,16 @@ func (a *App) loadRoutes(ctx context.Context) (http.Handler, error) {
 		a.logger.Error(err.Error())
 		panic(err)
 	}
-	router.Handle("/containers/", http.StripPrefix("/containers", dockermgm.LoadRoutes()))
+	router.Handle("/container/", http.StripPrefix("/container", dockermgm.LoadRoutes()))
 
 	repo := repository.New(a.db)
 
-	cron, err := cronhandler.New(a.logger, repo, ctx)
+	cron, err := taskhandler.New(a.logger, repo, ctx)
 	if err != nil {
 		a.logger.Error(err.Error())
 		panic(err)
 	}
-	router.Handle("/cron/", http.StripPrefix("/cron", cron.LoadRoutes()))
+	router.Handle("/task/", http.StripPrefix("/task", cron.LoadRoutes()))
 
 	chain := middleware.Chain(
 		middleware.Logging(a.logger),

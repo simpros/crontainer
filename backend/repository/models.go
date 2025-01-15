@@ -8,11 +8,20 @@ import (
 	"database/sql"
 )
 
-type CronJob struct {
+type Task struct {
 	ID        int64
 	Name      string
-	Schedule  string
 	Command   string
 	CreatedAt sql.NullTime
 	UpdatedAt sql.NullTime
+}
+
+type TaskAssignment struct {
+	ID          int64
+	ContainerID string
+	TaskID      int64
+	Schedule    string
+	Active      sql.NullBool
+	CreatedAt   sql.NullTime
+	UpdatedAt   sql.NullTime
 }

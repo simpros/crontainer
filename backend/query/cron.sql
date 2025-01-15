@@ -1,11 +1,11 @@
 -- name: FindAll :many
-SELECT * FROM cron_jobs;
+SELECT * FROM tasks;
 
 -- name: FindByID :one
-SELECT * FROM cron_jobs WHERE id = ?;
+SELECT * FROM tasks WHERE id = ?;
 
 -- name: FindByName :one
-SELECT * FROM cron_jobs WHERE name = ?;
+SELECT * FROM tasks WHERE name = ?;
 
 -- name: UpdateName :exec
-UPDATE cron_jobs SET name = ? WHERE id = ?;
+UPDATE tasks SET name = ? WHERE id = ?;

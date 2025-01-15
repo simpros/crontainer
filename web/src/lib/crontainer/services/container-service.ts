@@ -2,12 +2,12 @@ import { BaseService, type BaseServiceArgs } from '$lib/crontainer/services/base
 import { parseResponse } from '$lib/crontainer/utils/response-parser';
 import type { DockerContainerDto } from '../types';
 
-export class ContainerManagement extends BaseService {
+export class ContainerService extends BaseService {
 	constructor(args: BaseServiceArgs) {
 		super(args);
 	}
 
 	async getContainers() {
-		return parseResponse<DockerContainerDto[]>(await this.fetch(`${this.baseUrl}/containers`));
+		return parseResponse<DockerContainerDto[]>(await this.fetch(`${this.baseUrl}/container`));
 	}
 }

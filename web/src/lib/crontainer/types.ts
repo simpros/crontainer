@@ -48,4 +48,12 @@ export type DockerContainerDto = {
 	Mounts: unknown[];
 };
 
+export type TaskDto = {
+	id: string;
+	name: string;
+	command: string;
+	createdAt: string;
+	updatedAt: string;
+};
+
 export type CrontainerResponse<T> = CrontainerSuccessResponse<T> | CrontainerErrorResponse;

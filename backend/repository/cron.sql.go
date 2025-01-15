@@ -10,22 +10,21 @@ import (
 )
 
 const findAll = `-- name: FindAll :many
-SELECT id, name, schedule, command, created_at, updated_at FROM cron_jobs
+SELECT id, name, command, created_at, updated_at FROM tasks
 `
 
-func (q *Queries) FindAll(ctx context.Context) ([]CronJob, error) {
+func (q *Queries) FindAll(ctx context.Context) ([]Task, error) {
 	rows, err := q.db.QueryContext(ctx, findAll)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []CronJob
+	var items []Task
 	for rows.Next() {
-		var i CronJob
+		var i Task
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
-			&i.Schedule,
 			&i.Command,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -44,16 +43,15 @@ func (q *Queries) FindAll(ctx context.Context) ([]CronJob, error) {
 }
 
 const findByID = `-- name: FindByID :one
-SELECT id, name, schedule, command, created_at, updated_at FROM cron_jobs WHERE id = ?
+SELECT id, name, command, created_at, updated_at FROM tasks WHERE id = ?
 `
 
-func (q *Queries) FindByID(ctx context.Context, id int64) (CronJob, error) {
+func (q *Queries) FindByID(ctx context.Context, id int64) (Task, error) {
 	row := q.db.QueryRowContext(ctx, findByID, id)
-	var i CronJob
+	var i Task
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.Schedule,
 		&i.Command,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -62,16 +60,15 @@ func (q *Queries) FindByID(ctx context.Context, id int64) (CronJob, error) {
 }
 
 const findByName = `-- name: FindByName :one
-SELECT id, name, schedule, command, created_at, updated_at FROM cron_jobs WHERE name = ?
+SELECT id, name, command, created_at, updated_at FROM tasks WHERE name = ?
 `
 
-func (q *Queries) FindByName(ctx context.Context, name string) (CronJob, error) {
+func (q *Queries) FindByName(ctx context.Context, name string) (Task, error) {
 	row := q.db.QueryRowContext(ctx, findByName, name)
-	var i CronJob
+	var i Task
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
-		&i.Schedule,
 		&i.Command,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -80,7 +77,7 @@ func (q *Queries) FindByName(ctx context.Context, name string) (CronJob, error) 
 }
 
 const updateName = `-- name: UpdateName :exec
-UPDATE cron_jobs SET name = ? WHERE id = ?
+UPDATE tasks SET name = ? WHERE id = ?
 `
 
 type UpdateNameParams struct {

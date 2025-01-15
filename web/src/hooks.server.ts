@@ -12,7 +12,7 @@ const initializeCrontainer: Handle = async ({ event, resolve }) => {
 
 const reroute: Handle = async ({ event, resolve }) => {
 	if (event.url.pathname === '/') {
-		redirect(301, '/c');
+		redirect(307, '/app/c');
 	}
 	return resolve(event);
 };

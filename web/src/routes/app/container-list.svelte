@@ -16,7 +16,7 @@
 		<Button
 			variant="ghost"
 			class={cn(active && 'bg-muted', 'w-full justify-start')}
-			href={`/c/${container.Id}`}
+			href="/c/{container.Id}"
 		>
 			<div class="font-bold">{container.Names[0].replace('/', '')}</div>
 			<div

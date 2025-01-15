@@ -1,14 +1,15 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData } from '../$types';
+	import TaskList from '../../task-list.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
 
-{#if data.jobs.error}
-	<p style="color: red">{data.jobs.error?.code}</p>
+{#if data.tasks.error}
+	<p style="color: red">{data.tasks.error?.code}</p>
 {:else}
 	<section class="grid h-full grid-cols-[min-content_3fr] gap-3">
-		<!-- <JobList jobs={data.jobs.data} /> -->
+		<TaskList tasks={data.tasks.data} />
 		<div>
 			<!-- {@render children()} -->
 		</div>

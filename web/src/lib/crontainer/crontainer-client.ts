@@ -1,13 +1,13 @@
 import type { BaseServiceArgs } from '$lib/crontainer/services/base-service';
-import { ContainerManagement } from '$lib/crontainer/services/container-management';
-import { CronManagement } from './services/cron-management';
+import { ContainerService } from '$lib/crontainer/services/container-service';
+import { TaskService } from './services/task-service';
 
 export class CrontainerClient {
-	container: ContainerManagement;
-	cron: CronManagement;
+	container: ContainerService;
+	task: TaskService;
 
 	constructor(args: BaseServiceArgs) {
-		this.container = new ContainerManagement(args);
-		this.cron = new CronManagement(args);
+		this.container = new ContainerService(args);
+		this.task = new TaskService(args);
 	}
 }
