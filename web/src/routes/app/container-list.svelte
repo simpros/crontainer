@@ -10,20 +10,15 @@
 	let { containers }: Props = $props();
 </script>
 
-<nav class="space-y-1">
+<section class="flex flex-col gap-1">
 	{#each containers as container}
 		{@const active = $page.params.containerid === container.Id}
 		<Button
 			variant="ghost"
-			class={cn(active && 'bg-muted', 'w-full justify-start')}
+			class={cn(active && 'bg-muted', 'justify-start')}
 			href="/c/{container.Id}"
 		>
 			<div class="font-bold">{container.Names[0].replace('/', '')}</div>
-			<div
-				class={cn('bg-destructive size-4 rounded-full', {
-					'bg-success': container.State === 'running'
-				})}
-			></div>
 		</Button>
 	{/each}
-</nav>
+</section>
