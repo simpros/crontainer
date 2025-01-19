@@ -5,7 +5,7 @@ export async function parseResponse<ExpectedData>(
 ): Promise<CrontainerResponse<ExpectedData>> {
 	if (res.ok) {
 		return {
-			data: (await res.json()) as ExpectedData,
+			data: (await res.json().then(defaultConverter)) as ExpectedData,
 			error: null
 		};
 	}
@@ -13,4 +13,14 @@ export async function parseResponse<ExpectedData>(
 		data: null,
 		error: await res.json()
 	};
+}
+
+async function defaultConverter<T extends object>(res: T) {
+	if ('createdAt' in res) {
+		res.createdAt = new Date(res.createdAt as string);
+	}
+	if ('updatedAt' in res) {
+		res.updatedAt = new Date(res.updatedAt as string);
+	}
+	return res;
 }

@@ -23,12 +23,12 @@ func (a *App) loadRoutes(ctx context.Context) (http.Handler, error) {
 
 	repo := repository.New(a.db)
 
-	cron, err := taskhandler.New(a.logger, repo, ctx)
+	task, err := taskhandler.New(a.logger, repo, ctx)
 	if err != nil {
 		a.logger.Error(err.Error())
 		panic(err)
 	}
-	router.Handle("/task/", http.StripPrefix("/task", cron.LoadRoutes()))
+	router.Handle("/task/", http.StripPrefix("/task", task.LoadRoutes()))
 
 	chain := middleware.Chain(
 		middleware.Logging(a.logger),

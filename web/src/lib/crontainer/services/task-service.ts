@@ -7,7 +7,11 @@ export class TaskService extends BaseService {
 		super(args);
 	}
 
-	async getTasks() {
+	async getAll() {
 		return parseResponse<TaskDto[]>(await this.fetch(`${this.baseUrl}/task`));
+	}
+
+	async get(taskId: string) {
+		return parseResponse<TaskDto>(await this.fetch(`${this.baseUrl}/task/${taskId}`));
 	}
 }
