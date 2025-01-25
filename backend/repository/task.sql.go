@@ -9,6 +9,28 @@ import (
 	"context"
 )
 
+const createTask = `-- name: CreateTask :one
+INSERT INTO tasks (name, command) VALUES (?, ?) RETURNING id, name, command, created_at, updated_at
+`
+
+type CreateTaskParams struct {
+	Name    string
+	Command string
+}
+
+func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) (Task, error) {
+	row := q.db.QueryRowContext(ctx, createTask, arg.Name, arg.Command)
+	var i Task
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Command,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const findAll = `-- name: FindAll :many
 SELECT id, name, command, created_at, updated_at FROM tasks
 `

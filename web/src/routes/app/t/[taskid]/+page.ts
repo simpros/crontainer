@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { valibot } from 'sveltekit-superforms/adapters';
+import { taskSchema } from '../task-schema';
 import type { PageLoad } from './$types';
-import { taskSchema } from './task-schema';
 
 export const load = (async ({ parent, params: { taskid } }) => {
 	const { crontainer } = await parent();

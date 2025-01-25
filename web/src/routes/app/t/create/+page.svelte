@@ -5,4 +5,7 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<TaskForm {data} />
+<section class="space-y-8">
+	<h1>New Task</h1>
+	<TaskForm {data} />
+</section>

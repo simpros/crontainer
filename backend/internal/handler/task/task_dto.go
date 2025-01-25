@@ -1,8 +1,11 @@
-package cronhandler
+package taskhandler
 
 import (
+	"fmt"
+	"net/url"
 	"time"
 
+	"github.com/simpros/crontainer/internal/errors"
 	"github.com/simpros/crontainer/repository"
 )
 
@@ -14,7 +17,7 @@ type TaskDTO struct {
 	UpdatedAt string `json:"updatedAt"`
 }
 
-func TaskToDTO(task repository.Task) TaskDTO {
+func ParseTaskToDTO(task repository.Task) TaskDTO {
 	return TaskDTO{
 		ID:        task.ID,
 		Name:      task.Name,
@@ -22,4 +25,17 @@ func TaskToDTO(task repository.Task) TaskDTO {
 		CreatedAt: task.CreatedAt.Time.Format(time.RFC3339),
 		UpdatedAt: task.UpdatedAt.Time.Format(time.RFC3339),
 	}
+}
+
+func ParseFormToCreateTaskParams(form url.Values) (repository.CreateTaskParams, error) {
+	if len(form) > 2 {
+		return repository.CreateTaskParams{}, &errors.CrontainerError{Code: 400, Message: fmt.Sprintf("too many parameters, expected 2, got %d", len(form))}
+	}
+	if form.Get("name") == "" || form.Get("command") == "" {
+		return repository.CreateTaskParams{}, &errors.CrontainerError{Code: 400, Message: "name and command are required"}
+	}
+	return repository.CreateTaskParams{
+		Name:    form.Get("name"),
+		Command: form.Get("command"),
+	}, nil
 }

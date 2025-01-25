@@ -21,4 +21,15 @@
 			<div class="font-bold">{task.name}</div>
 		</Button>
 	{/each}
+	<Button
+		variant="default"
+		class={cn(
+			$page.route.id === '/app/t/create' &&
+				'bg-muted text-foreground hover:text-primary-foreground',
+			'w-full justify-start transition-all'
+		)}
+		href="/app/t/create"
+	>
+		<div class="font-bold">Add</div>
+	</Button>
 </section>
