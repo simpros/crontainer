@@ -2,13 +2,13 @@ package containerhandler
 
 import (
 	"context"
-	"encoding/json"
 	"log/slog"
 	"net/http"
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	"github.com/simpros/crontainer/internal/errors"
+	"github.com/simpros/crontainer/internal/handler"
 )
 
 type DockerMgm struct {
@@ -36,7 +36,7 @@ func New(logger *slog.Logger, ctx context.Context) (*DockerMgm, error) {
 func (h *DockerMgm) LoadRoutes() *http.ServeMux {
 	router := http.NewServeMux()
 
-	router.HandleFunc("/", h.GetContainers)
+	router.HandleFunc("GET /", h.GetContainers)
 
 	return router
 }
@@ -49,15 +49,10 @@ func (h *DockerMgm) GetContainers(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		h.logger.Error(err.Error())
-
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(errors.CrontainerError{
-			Code:    1001,
-			Message: "Failed to list containers",
-		})
+		errors.WriteErrorResponse(w, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(containers)
+	response := handler.NewCrontainerResponse(200, containers)
+	handler.WriteCrontainerResponse(w, response)
 }

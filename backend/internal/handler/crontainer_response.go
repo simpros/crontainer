@@ -5,19 +5,19 @@ import (
 	"net/http"
 )
 
-type CrontainerResponse struct {
+type crontainerResponse struct {
 	Status int         `json:"-"`
 	Data   interface{} `json:"data"`
 }
 
-func NewCrontainerResponse(status int, data interface{}) *CrontainerResponse {
-	return &CrontainerResponse{
+func NewCrontainerResponse(status int, data interface{}) *crontainerResponse {
+	return &crontainerResponse{
 		Status: status,
 		Data:   data,
 	}
 }
 
-func WriteCrontainerResponse(w http.ResponseWriter, response *CrontainerResponse) {
+func WriteCrontainerResponse(w http.ResponseWriter, response *crontainerResponse) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(response.Status)
 	if err := json.NewEncoder(w).Encode(response); err != nil {

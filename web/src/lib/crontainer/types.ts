@@ -1,13 +1,9 @@
-export type CrontainerErrorResponse = {
-	data: null;
-	error: {
-		code: number;
-		message: string;
-	};
+export type ErrorDto = {
+	code: number;
+	message: string;
 };
 
-export type CrontainerSuccessResponse<T> = {
-	error: null;
+export type SuccessDto<T = unknown> = {
 	data: T;
 };
 
@@ -56,4 +52,15 @@ export type TaskDto = {
 	updatedAt: Date;
 };
 
+export type CrontainerErrorResponse = {
+	data: null;
+	error: {
+		code: number;
+		message: string;
+	};
+};
+export type CrontainerSuccessResponse<T> = {
+	error: null;
+	data: T;
+};
 export type CrontainerResponse<T> = CrontainerSuccessResponse<T> | CrontainerErrorResponse;
