@@ -1,10 +1,11 @@
-import type { CrontainerResponse, ErrorDto } from '$lib/crontainer/types';
+import type { CrontainerResponse, ErrorDto, SuccessDto } from '$lib/crontainer/types';
 
 export async function parseResponse<ExpectedData>(
 	res: Response
 ): Promise<CrontainerResponse<ExpectedData>> {
 	if (res.ok) {
-		const { data } = (await res.json().then(defaultConverter)) as { data: ExpectedData };
+		const data = (await res.json().then(defaultConverter)) as ExpectedData;
+
 		return {
 			data,
 			error: null
@@ -16,14 +17,27 @@ export async function parseResponse<ExpectedData>(
 	};
 }
 
-async function defaultConverter<T extends object>(res: T) {
-	console.log('res', res);
+async function defaultConverter(res: SuccessDto) {
+	if (Array.isArray(res.data)) {
+		return res.data.map((item) => parseObject(item));
+	}
+	if (typeof res.data === 'object') {
+		return parseObject(res.data as object);
+	}
+}
 
-	if ('createdAt' in res) {
-		res.createdAt = new Date(res.createdAt as string);
-	}
-	if ('updatedAt' in res) {
-		res.updatedAt = new Date(res.updatedAt as string);
-	}
-	return res;
+const possibleDateKeys = ['createdAt', 'updatedAt'];
+
+function parseObject<T extends object>(obj: T) {
+	return Object.entries(obj).reduce(
+		(acc, [key, value]) => {
+			if (possibleDateKeys.includes(key) && typeof value === 'string') {
+				acc[key] = new Date(value);
+			} else {
+				acc[key] = value;
+			}
+			return acc;
+		},
+		{} as Record<string, string | number | Date>
+	);
 }
