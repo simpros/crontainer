@@ -7,7 +7,6 @@ import (
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
-	"github.com/simpros/crontainer/internal/errors"
 	"github.com/simpros/crontainer/internal/handler"
 )
 
@@ -49,7 +48,7 @@ func (h *DockerMgm) GetContainers(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		h.logger.Error(err.Error())
-		errors.WriteErrorResponse(w, err)
+		handler.WriteErrorResponse(w, err)
 		return
 	}
 

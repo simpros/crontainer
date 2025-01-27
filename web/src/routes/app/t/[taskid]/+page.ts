@@ -15,8 +15,6 @@ export const load = (async ({ parent, params: { taskid } }) => {
 		return error(404, 'Task not found');
 	}
 
-	console.log('task.data', task.data);
-
 	const form = await superValidate(task.data, valibot(taskSchema));
 
 	return { form };

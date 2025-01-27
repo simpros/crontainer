@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/simpros/crontainer/internal/errors"
 	"github.com/simpros/crontainer/internal/handler"
 	"github.com/simpros/crontainer/repository"
 )
@@ -38,7 +37,7 @@ func (h *TaskHandler) GetTasks(w http.ResponseWriter, r *http.Request) {
 	tasks, err := h.queries.FindAll(r.Context())
 	if err != nil {
 		h.logger.Error(err.Error())
-		errors.WriteErrorResponse(w, err)
+		handler.WriteErrorResponse(w, err)
 		return
 	}
 
@@ -56,14 +55,14 @@ func (h *TaskHandler) GetTask(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		errors.WriteErrorResponse(w, err)
+		handler.WriteErrorResponse(w, err)
 		return
 	}
 
 	task, err := h.queries.FindByID(r.Context(), id)
 	if err != nil {
 		h.logger.Error(err.Error())
-		errors.WriteErrorResponse(w, err)
+		handler.WriteErrorResponse(w, err)
 		return
 	}
 
@@ -72,21 +71,21 @@ func (h *TaskHandler) GetTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *TaskHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	createTask, err := ParseFormToCreateTaskParams(r.Form)
+
+	createTask, err := ParseBodyToCreateTask(r.Body)
 
 	if err != nil {
-		errors.WriteErrorResponse(w, err)
+		handler.WriteErrorResponse(w, err)
 		return
 	}
 
 	task, err := h.queries.CreateTask(r.Context(), createTask)
 	if err != nil {
 		h.logger.Error(err.Error())
-		errors.WriteErrorResponse(w, err)
+		handler.WriteErrorResponse(w, err)
 		return
 	}
 
-	response := handler.NewCrontainerResponse(201, task)
+	response := handler.NewCrontainerResponse(201, ParseTaskToDTO(task))
 	handler.WriteCrontainerResponse(w, response)
 }

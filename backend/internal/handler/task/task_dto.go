@@ -1,11 +1,11 @@
 package taskhandler
 
 import (
-	"fmt"
-	"net/url"
+	"encoding/json"
+	"io"
 	"time"
 
-	"github.com/simpros/crontainer/internal/errors"
+	"github.com/simpros/crontainer/internal/handler"
 	"github.com/simpros/crontainer/repository"
 )
 
@@ -27,15 +27,29 @@ func ParseTaskToDTO(task repository.Task) TaskDTO {
 	}
 }
 
-func ParseFormToCreateTaskParams(form url.Values) (repository.CreateTaskParams, error) {
-	if len(form) > 2 {
-		return repository.CreateTaskParams{}, &errors.CrontainerError{Code: 400, Message: fmt.Sprintf("too many parameters, expected 2, got %d", len(form))}
+type CreateTask struct {
+	Name    string `json:"name,omitempty"`
+	Command string `json:"command,omitempty"`
+}
+
+func ParseBodyToCreateTask(body io.ReadCloser) (repository.CreateTaskParams, error) {
+	var createTask CreateTask
+	decoder := json.NewDecoder(body)
+	decoder.DisallowUnknownFields()
+	err := decoder.Decode(&createTask)
+	if err != nil {
+		return repository.CreateTaskParams{}, err
 	}
-	if form.Get("name") == "" || form.Get("command") == "" {
-		return repository.CreateTaskParams{}, &errors.CrontainerError{Code: 400, Message: "name and command are required"}
+
+	if createTask.Name == "" {
+		return repository.CreateTaskParams{}, &handler.CrontainerError{Code: 400, Message: "name is required"}
 	}
+	if createTask.Command == "" {
+		return repository.CreateTaskParams{}, &handler.CrontainerError{Code: 400, Message: "command is required"}
+	}
+
 	return repository.CreateTaskParams{
-		Name:    form.Get("name"),
-		Command: form.Get("command"),
+		Name:    createTask.Name,
+		Command: createTask.Command,
 	}, nil
 }
