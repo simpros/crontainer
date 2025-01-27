@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Accordion from '$lib/components/ui/accordion';
 	import type { CrontainerResponse, DockerContainerDto, TaskDto } from '$lib/crontainer/types';
-	import { isErrorResponse } from '$lib/crontainer/utils/isErrorResponse';
+	import { isErrorResponse } from '$lib/crontainer/utils/is-error-response';
 	import ContainerList from './container-list.svelte';
 	import TaskList from './task-list.svelte';
 

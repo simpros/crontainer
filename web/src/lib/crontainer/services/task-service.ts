@@ -1,6 +1,6 @@
 import { BaseService, type BaseServiceArgs } from '$lib/crontainer/services/base-service';
 import { parseResponse } from '$lib/crontainer/utils/response-parser';
-import type { TaskDto } from '../types';
+import type { CreateTask, TaskDto as Task } from '../types';
 
 export class TaskService extends BaseService {
 	constructor(args: BaseServiceArgs) {
@@ -8,10 +8,19 @@ export class TaskService extends BaseService {
 	}
 
 	async getAll() {
-		return parseResponse<TaskDto[]>(await this.fetch(`${this.baseUrl}/task`));
+		return parseResponse<Task[]>(await this.fetch(`${this.baseUrl}/task/`));
 	}
 
 	async get(taskId: string) {
-		return parseResponse<TaskDto>(await this.fetch(`${this.baseUrl}/task/${taskId}`));
+		return parseResponse<Task>(await this.fetch(`${this.baseUrl}/task/${taskId}`));
+	}
+
+	async create(task: CreateTask) {
+		return parseResponse<Task>(
+			await this.fetch(`${this.baseUrl}/task/`, {
+				method: 'POST',
+				body: JSON.stringify(task)
+			})
+		);
 	}
 }

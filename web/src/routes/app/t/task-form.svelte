@@ -27,6 +27,7 @@
 	);
 
 	const form = superForm(data.form, {
+		dataType: 'json',
 		validators: valibotClient(taskSchema)
 	});
 

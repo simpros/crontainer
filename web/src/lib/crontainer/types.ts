@@ -52,6 +52,11 @@ export type TaskDto = {
 	updatedAt: Date;
 };
 
+export type CreateTask = {
+	name: string;
+	command: string;
+};
+
 export type CrontainerErrorResponse = {
 	data: null;
 	error: {
