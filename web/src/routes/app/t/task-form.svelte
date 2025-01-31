@@ -34,30 +34,34 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<form method="POST" use:enhance>
-	<Form.Field {form} name="name">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>Name</Form.Label>
-				<Input {...props} bind:value={$formData.name} />
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
-	<Form.Field {form} name="command">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>Command</Form.Label>
-				<CodeMirror
-					{...props}
-					class="[&>.cm-editor]:rounded-md [&>.cm-editor]:border [&>.cm-editor]:border-black"
-					theme={myTheme}
-					bind:value={$formData.command}
-					extensions={[StreamLanguage.define(shell)]}
-				/>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
-	<Form.Button>Submit</Form.Button>
+<form method="POST" use:enhance class="grid h-full grid-rows-[1fr_auto] gap-4">
+	<div>
+		<Form.Field {form} name="name">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label>Name</Form.Label>
+					<Input {...props} bind:value={$formData.name} />
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+		<Form.Field {form} name="command">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label>Command</Form.Label>
+					<CodeMirror
+						{...props}
+						class="[&>.cm-editor]:rounded-md [&>.cm-editor]:border [&>.cm-editor]:border-black"
+						theme={myTheme}
+						bind:value={$formData.command}
+						extensions={[StreamLanguage.define(shell)]}
+					/>
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+	</div>
+	<div class="flex justify-end">
+		<Form.Button>Submit</Form.Button>
+	</div>
 </form>

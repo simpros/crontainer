@@ -11,6 +11,10 @@ const initializeCrontainer: Handle = async ({ event, resolve }) => {
 };
 
 const reroute: Handle = async ({ event, resolve }) => {
+	const isAvailable = await event.locals.crontainer.isAvailable();
+	if (event.route.id !== '/unavailable' && !isAvailable) {
+		return redirect(307, '/unavailable');
+	}
 	if (event.url.pathname === '/') {
 		redirect(307, '/app/c');
 	}

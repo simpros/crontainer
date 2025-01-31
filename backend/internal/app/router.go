@@ -14,6 +14,10 @@ func (a *App) loadRoutes(ctx context.Context) (http.Handler, error) {
 
 	router := http.NewServeMux()
 
+	router.Handle("GET /health", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
 	dockermgm, err := containerhandler.New(a.logger, ctx)
 	if err != nil {
 		a.logger.Error(err.Error())
