@@ -1,0 +1,12 @@
+GET http://localhost:8080/task
+
+@id=1
+GET http://localhost:8080/task/1
+
+POST http://localhost:8080/task
+Content-Type: application/json
+{
+  "name": "task 1",
+  "command": "echo hello world"
+}
+
