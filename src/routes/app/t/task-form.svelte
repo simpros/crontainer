@@ -34,7 +34,7 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<form method="POST" use:enhance class="grid h-full grid-rows-[1fr_auto] gap-4">
+<form method="POST" use:enhance class="grid grid-rows-[1fr_auto] gap-4">
 	<div>
 		<Form.Field {form} name="name">
 			<Form.Control>
