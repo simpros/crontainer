@@ -2,7 +2,11 @@ import { CrontainerClient } from '$lib/crontainer/crontainer-client';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-const initializeCrontainer: Handle = async ({ event, resolve }) => {
+// export const init: ServerInit = async ({ event, resolve }) => {
+// 	db.
+// }
+
+const initializeDb: Handle = async ({ event, resolve }) => {
 	event.locals.crontainer = new CrontainerClient({
 		baseUrl: 'http://localhost:8080',
 		fetch: event.fetch
@@ -21,4 +25,4 @@ const reroute: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle = sequence(initializeCrontainer, reroute);
+export const handle = sequence(initializeDb, reroute);
