@@ -1,6 +1,6 @@
-import { closeDb, db, enableDefaultPragmas, migrate } from '$lib/server/db';
 import { redirect, type Handle, type ServerInit } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
+import { closeDb, db, enableDefaultPragmas, migrate } from './db/db';
 
 console.log('Server hooks loaded');
 

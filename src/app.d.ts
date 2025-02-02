@@ -7,7 +7,7 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			db: LibSQLDatabase<typeof import('./schema')>;
+			db: LibSQLDatabase<typeof import('./db/_schema')>;
 		}
 		// interface PageData {}
 		// interface PageState {}
