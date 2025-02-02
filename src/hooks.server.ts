@@ -1,10 +1,17 @@
 import { CrontainerClient } from '$lib/crontainer/crontainer-client';
-import { redirect, type Handle } from '@sveltejs/kit';
+import { db } from '$lib/server/db';
+import { redirect, type Handle, type ServerInit } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
+import { sql } from 'drizzle-orm';
 
-// export const init: ServerInit = async ({ event, resolve }) => {
-// 	db.
-// }
+export const init: ServerInit = async () => {
+	const statement = sql`
+					PRAGMA journal_mode = WAL;
+					PRAGMA foreign_keys = ON;
+					PRAGMA synchronous = NORMAL;
+				`;
+	await db.run(statement);
+};
 
 const initializeDb: Handle = async ({ event, resolve }) => {
 	event.locals.crontainer = new CrontainerClient({
