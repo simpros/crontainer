@@ -1,12 +1,13 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-import type { CrontainerClient } from '$lib/crontainer/crontainer-client';
+
+import type { LibSQLDatabase } from 'drizzle-orm/libsql';
 
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			crontainer: CrontainerClient;
+			db: LibSQLDatabase<typeof import('./schema')>;
 		}
 		// interface PageData {}
 		// interface PageState {}

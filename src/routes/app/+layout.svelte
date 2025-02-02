@@ -8,7 +8,7 @@
 
 <section class="grid h-full grid-cols-[20rem_1fr] gap-5">
 	<Sidebar containers={data.containers} tasks={data.tasks} />
-	<main class="bg-muted h-full rounded-l-3xl p-4">
+	<main class="h-full rounded-l-3xl bg-muted p-4">
 		{@render children()}
 	</main>
 </section>

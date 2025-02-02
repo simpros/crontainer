@@ -1,13 +1,12 @@
 <script lang="ts">
+	import type { Tasks } from '$db';
 	import * as Accordion from '$lib/components/ui/accordion';
-	import type { CrontainerResponse, DockerContainerDto, TaskDto } from '$lib/crontainer/types';
-	import { isErrorResponse } from '$lib/crontainer/utils/is-error-response';
 	import ContainerList from './container-list.svelte';
 	import TaskList from './task-list.svelte';
 
 	type Props = {
-		containers: Promise<CrontainerResponse<DockerContainerDto[]>>;
-		tasks: Promise<CrontainerResponse<TaskDto[]>>;
+		containers: Promise<never[]>;
+		tasks: Promise<Tasks[]>;
 	};
 
 	const { containers, tasks }: Props = $props();
@@ -23,11 +22,9 @@
 				<Accordion.Trigger>Tasks</Accordion.Trigger>
 				<Accordion.Content>
 					{#await tasks then $tasks}
-						{#if !isErrorResponse($tasks)}
-							<TaskList tasks={$tasks.data} />
-						{:else}
-							<p>{$tasks.error.message}</p>
-						{/if}
+						<TaskList tasks={$tasks} />
+					{:catch err}
+						<p>{err.message}</p>
 					{/await}
 				</Accordion.Content>
 			</Accordion.Item>
@@ -35,11 +32,9 @@
 				<Accordion.Trigger>Container</Accordion.Trigger>
 				<Accordion.Content>
 					{#await containers then $containers}
-						{#if !isErrorResponse($containers)}
-							<ContainerList containers={$containers.data} />
-						{:else}
-							<p>{$containers.error.message}</p>
-						{/if}
+						<ContainerList containers={$containers} />
+					{:catch err}
+						<p>{err.message}</p>
 					{/await}
 				</Accordion.Content>
 			</Accordion.Item>

@@ -48,3 +48,5 @@ export const assignmentContainerRelations = relations(assignmentContainers, ({ o
 		references: [taskAssignments.id]
 	})
 }));
+
+export type Tasks = typeof tasks.$inferSelect;

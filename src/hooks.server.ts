@@ -1,31 +1,25 @@
-import { CrontainerClient } from '$lib/crontainer/crontainer-client';
-import { db } from '$lib/server/db';
+import { closeDb, db, enableDefaultPragmas, migrate } from '$lib/server/db';
 import { redirect, type Handle, type ServerInit } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import { sql } from 'drizzle-orm';
+
+console.log('Server hooks loaded');
+
+process.on('sveltekit:shutdown', () => {
+	console.log('Shutting down');
+	closeDb();
+});
 
 export const init: ServerInit = async () => {
-	const statement = sql`
-					PRAGMA journal_mode = WAL;
-					PRAGMA foreign_keys = ON;
-					PRAGMA synchronous = NORMAL;
-				`;
-	await db.run(statement);
+	await migrate();
+	await enableDefaultPragmas();
 };
 
 const initializeDb: Handle = async ({ event, resolve }) => {
-	event.locals.crontainer = new CrontainerClient({
-		baseUrl: 'http://localhost:8080',
-		fetch: event.fetch
-	});
+	event.locals.db = db;
 	return resolve(event);
 };
 
 const reroute: Handle = async ({ event, resolve }) => {
-	const isAvailable = await event.locals.crontainer.isAvailable();
-	if (event.route.id !== '/unavailable' && !isAvailable) {
-		return redirect(307, '/unavailable');
-	}
 	if (event.url.pathname === '/') {
 		redirect(307, '/app/c');
 	}
