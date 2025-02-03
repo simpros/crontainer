@@ -1,13 +1,13 @@
 <script lang="ts">
+	import { taskSchema, type TaskSchema } from '$db/tasks';
 	import * as Form from '$lib/components/ui/form/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { StreamLanguage } from '@codemirror/language';
 	import { shell } from '@codemirror/legacy-modes/mode/shell';
 	import { EditorView } from '@codemirror/view';
 	import CodeMirror from 'svelte-codemirror-editor';
-	import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { valibotClient } from 'sveltekit-superforms/adapters';
-	import { taskSchema, type TaskSchema } from './task-schema';
 
 	let { data }: { data: { form: SuperValidated<Infer<TaskSchema>> } } = $props();
 	let myTheme = EditorView.theme(

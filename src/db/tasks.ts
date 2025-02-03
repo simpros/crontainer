@@ -1,5 +1,6 @@
 import { relations, sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { createInsertSchema } from 'drizzle-valibot';
 import { taskAssignments } from './taskAssignments';
 
 export const tasks = sqliteTable('tasks', {
@@ -16,3 +17,6 @@ export const taskRelations = relations(tasks, ({ many }) => ({
 
 export type Tasks = typeof tasks.$inferSelect;
 export type TasksCreate = typeof tasks.$inferInsert;
+
+export const taskSchema = createInsertSchema(tasks);
+export type TaskSchema = typeof taskSchema;

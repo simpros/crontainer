@@ -1,8 +1,8 @@
+import { taskSchema } from '$db/tasks';
 import { isRedirect, redirect } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { valibot } from 'sveltekit-superforms/adapters';
 import { tasks } from '../../../../db/_schema';
-import { taskSchema } from '../task-schema';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {

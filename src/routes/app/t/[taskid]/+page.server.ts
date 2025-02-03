@@ -1,7 +1,7 @@
+import { taskSchema } from '$db/tasks';
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { valibot } from 'sveltekit-superforms/adapters';
-import { taskSchema } from '../task-schema';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { db }, params: { taskid } }) => {

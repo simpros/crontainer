@@ -2,8 +2,6 @@ import { redirect, type Handle, type ServerInit } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { closeDb, db, enableDefaultPragmas, migrate } from './db/db';
 
-console.log('Server hooks loaded');
-
 process.on('sveltekit:shutdown', () => {
 	console.log('Shutting down');
 	closeDb();

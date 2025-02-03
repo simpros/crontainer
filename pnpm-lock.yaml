@@ -63,6 +63,9 @@ importers:
       drizzle-orm:
         specifier: ^0.39.1
         version: 0.39.1(@libsql/client@0.14.0)(bun-types@1.2.2)
+      drizzle-valibot:
+        specifier: ^0.4.0
+        version: 0.4.0(drizzle-orm@0.39.1(@libsql/client@0.14.0)(bun-types@1.2.2))(valibot@1.0.0-beta.12(typescript@5.7.3))
       eslint:
         specifier: ^9.19.0
         version: 9.19.0(jiti@1.21.7)
@@ -1612,6 +1615,12 @@ packages:
         optional: true
       sqlite3:
         optional: true
+
+  drizzle-valibot@0.4.0:
+    resolution: {integrity: sha512-0K90Ko1l5uRFNMN/3RwVQy+6biEHiXA/thxq+ZsEDuHqevpiY1Yy8qQEzx9eshv3HEtFlaulAoV0POZJ0bcdJg==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.0'
+      valibot: '>=1.0.0-beta.7'
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -4047,6 +4056,11 @@ snapshots:
     optionalDependencies:
       '@libsql/client': 0.14.0
       bun-types: 1.2.2
+
+  drizzle-valibot@0.4.0(drizzle-orm@0.39.1(@libsql/client@0.14.0)(bun-types@1.2.2))(valibot@1.0.0-beta.12(typescript@5.7.3)):
+    dependencies:
+      drizzle-orm: 0.39.1(@libsql/client@0.14.0)(bun-types@1.2.2)
+      valibot: 1.0.0-beta.12(typescript@5.7.3)
 
   eastasianwidth@0.2.0: {}
 
