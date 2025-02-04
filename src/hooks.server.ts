@@ -1,3 +1,4 @@
+import { dockerode } from '$dockerode/dockerode';
 import { redirect, type Handle, type ServerInit } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { closeDb, db, enableDefaultPragmas, migrate } from './db/db';
@@ -10,6 +11,13 @@ process.on('sveltekit:shutdown', () => {
 export const init: ServerInit = async () => {
 	await migrate();
 	await enableDefaultPragmas();
+	const startupPing = await dockerode.ping();
+	console.log('Dockerode ping:', startupPing);
+};
+
+const initializeDockerode: Handle = async ({ event, resolve }) => {
+	event.locals.dockerode = dockerode;
+	return resolve(event);
 };
 
 const initializeDb: Handle = async ({ event, resolve }) => {
