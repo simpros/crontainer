@@ -4,9 +4,9 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import type { CrontainerResponse, DockerContainerDto } from '$lib/crontainer/types';
 	import parser from 'cron-parser';
 	import { format } from 'date-fns';
+	import type { ContainerInfo } from 'dockerode';
 	import { derived } from 'svelte/store';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { valibotClient } from 'sveltekit-superforms/adapters';
@@ -15,7 +15,7 @@
 	type AssignmentFormProps = {
 		data: {
 			form: SuperValidated<Infer<AssignmentSchema>>;
-			containers: Promise<CrontainerResponse<DockerContainerDto[]>>;
+			containers: Promise<ContainerInfo[]>;
 		};
 	};
 	let { data }: AssignmentFormProps = $props();
@@ -46,7 +46,7 @@
 	});
 </script>
 
-{#snippet FormElement(containers: DockerContainerDto[])}
+{#snippet FormElement(containers: ContainerInfo[])}
 	<form method="POST" use:enhance class="grid h-full grid-rows-[1fr_auto] gap-4">
 		<div class="space-y-4">
 			<Form.FormField {form} name="schedule">
@@ -96,11 +96,7 @@
 {#await data.containers}
 	<p>Loading...</p>
 {:then containers}
-	{#if containers.error !== null}
-		<p>{containers.error.message}</p>
-	{:else}
-		{@render FormElement(containers.data)}
-	{/if}
+	{@render FormElement(containers)}
 {:catch error}
 	<p>{error.message}</p>
 {/await}
