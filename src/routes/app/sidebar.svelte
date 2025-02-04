@@ -1,11 +1,12 @@
 <script lang="ts">
-	import type { Tasks } from '$db';
+	import type { Tasks } from '$db/tasks';
 	import * as Accordion from '$lib/components/ui/accordion';
+	import type { ContainerInfo } from 'dockerode';
 	import ContainerList from './container-list.svelte';
 	import TaskList from './task-list.svelte';
 
 	type Props = {
-		containers: Promise<never[]>;
+		containers: Promise<ContainerInfo[]>;
 		tasks: Promise<Tasks[]>;
 	};
 

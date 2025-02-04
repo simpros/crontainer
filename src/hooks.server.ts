@@ -11,8 +11,6 @@ process.on('sveltekit:shutdown', () => {
 export const init: ServerInit = async () => {
 	await migrate();
 	await enableDefaultPragmas();
-	const startupPing = await dockerode.ping();
-	console.log('Dockerode ping:', startupPing);
 };
 
 const initializeDockerode: Handle = async ({ event, resolve }) => {
@@ -32,4 +30,4 @@ const reroute: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle = sequence(initializeDb, reroute);
+export const handle = sequence(initializeDockerode, initializeDb, reroute);

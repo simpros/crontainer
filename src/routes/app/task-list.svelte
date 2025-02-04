@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
+	import type { Tasks } from '$db/tasks';
 	import { Button } from '$lib/components/ui/button';
-	import type { TaskDto } from '$lib/crontainer/types';
 	import { cn } from '$lib/utils';
 
 	type Props = {
-		tasks: TaskDto[];
+		tasks: Tasks[];
 	};
 	let { tasks }: Props = $props();
 </script>
 
 <section class="space-y-1">
 	{#each tasks as task}
-		{@const active = $page.params.taskid == task.id}
+		{@const active = parseInt(page.params.taskid) == task.id}
 		<Button
 			variant="ghost"
 			class={cn(active && 'bg-muted', 'w-full justify-start')}
@@ -24,8 +24,7 @@
 	<Button
 		variant="default"
 		class={cn(
-			$page.route.id === '/app/t/create' &&
-				'bg-muted text-foreground hover:text-primary-foreground',
+			page.route.id === '/app/t/create' && 'bg-muted text-foreground hover:text-primary-foreground',
 			'w-full justify-start transition-all'
 		)}
 		href="/app/t/create"
