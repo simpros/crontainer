@@ -13,7 +13,7 @@
 	const { containers, tasks }: Props = $props();
 </script>
 
-<aside>
+<aside class="rounded-r-3xl bg-sidebar pr-6">
 	<header class="m-2 grid grid-cols-[auto_1fr] gap-4 rounded-xl px-3 py-2">
 		<h2 class="w-min text-4xl font-bold">Crontainer</h2>
 	</header>

@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
 import { fontFamily } from 'tailwindcss/defaultTheme';
+import gridAuto from './tw-plugin/grid-auto';
 
 const config: Config = {
 	darkMode: ['class'],
@@ -90,7 +91,7 @@ const config: Config = {
 			}
 		}
 	},
-	plugins: [tailwindcssAnimate]
+	plugins: [tailwindcssAnimate, gridAuto]
 };
 
 export default config;
